@@ -1,0 +1,458 @@
+{
+  "name": "Clay — Prospect Intake",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "email": "={{ $('Normalize Prospect Data').item.json.email }}",
+        "additionalFields": {
+          "leadStatus": "OPEN"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2.3,
+      "position": [
+        1376,
+        176
+      ],
+      "id": "80dc93ac-2be6-4d2c-9cb1-ced6c631d357",
+      "name": "HubSpot — Outreach Rejected"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "clay-prospect-intake",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a0e0ec6a-5ee5-42ed-ad27-1cb407cb9151",
+      "name": "Clay — Prospect Intake"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "51027b14-7d9a-4f77-ac77-13e52bd6d158",
+              "name": "company",
+              "value": "={{ $json.body.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "6c2c48cd-9f4d-4559-9303-4cff9a69f57f",
+              "name": "email",
+              "value": "={{ $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "4a93eaef-986e-4b24-89bf-e44b0e66472d",
+              "name": "job_title",
+              "value": "={{ $json.body.job_title }}",
+              "type": "string"
+            },
+            {
+              "id": "b313bf48-3e94-4ab5-994a-bf28f8d12eb4",
+              "name": "outreach_status",
+              "value": "={{ $json.body.outreach_status }}",
+              "type": "string"
+            },
+            {
+              "id": "2e413b10-1c09-444b-a33b-844f76d948bd",
+              "name": "linkedin_url",
+              "value": "={{ $json.body.linkedin_url ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "8797dfe6-ebad-487d-90a4-991344f9252d",
+              "name": "email_subject",
+              "value": "={{ $json.body.email_subject }}",
+              "type": "string"
+            },
+            {
+              "id": "0688ce33-c722-4cc0-944a-1962095e2935",
+              "name": "email_body",
+              "value": "={{ $json.body.email_body }}",
+              "type": "string"
+            },
+            {
+              "id": "8ffd0753-1181-4776-a8ca-df5bbbd2f47a",
+              "name": "first_name",
+              "value": "={{ $json.body.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "4fb49f8f-8c24-4dfb-ac22-c08235bdbef5",
+              "name": "last_name",
+              "value": "={{ $json.body.last_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "6a12aade-46a3-438d-8707-83366c4c219c",
+      "name": "Normalize Prospect Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "88ab90da-6e1a-4965-b5b8-01be73e8673a",
+              "leftValue": "={{ $json.first_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "a9ad85fe-4701-4f0a-aac4-5a8ea72a7406",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "a1090e1a-86b9-481d-a5f7-ec5f69cdf678",
+              "leftValue": "={{ $json.outreach_status }}",
+              "rightValue": "Draft",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "27caa061-f2fa-4eb5-b6e0-b36d8fdd17e2",
+              "leftValue": "={{ $json.email_subject }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "02aa1c30-5a1d-4b07-9f89-df9abffa5758",
+              "leftValue": "={{ $json.email_body }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "2f1e6753-c77e-433a-b2e1-76892467be82",
+              "leftValue": "={{ $json.company }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "4ce0f182-729a-4fc1-8ef3-2e2e1ad379fe",
+              "leftValue": "={{ /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test($json.email || '') }}",
+              "rightValue": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        448,
+        0
+      ],
+      "id": "75e7a439-731e-4378-b389-e7bc5a23f4c4",
+      "name": "Validate Prospect"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "email": "={{ $json.email }}",
+        "additionalFields": {
+          "companyName": "={{ $json.company }}",
+          "firstName": "={{ $json.first_name }}",
+          "jobTitle": "={{ $json.job_title }}",
+          "lastName": "={{ $json.last_name }}",
+          "linkedinUrl": "={{ $json.linkedin_url }}"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        -96
+      ],
+      "id": "01286bae-fe98-4812-a9e1-5717911b7388",
+      "name": "HubSpot — Upsert Contact"
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ $('Validate Prospect').item.json.email_subject }}",
+        "message": "={{ $('Validate Prospect').item.json.email_body }}",
+        "options": {
+          "sendTo": "={{ $('Validate Prospect').item.json.email }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        -96
+      ],
+      "id": "472200c1-4a2e-404f-9ee3-2e7e12ddea8f",
+      "name": "Gmail — Create Outreach Draft"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "YOUR_SLACK_CHANNEL_ID"
+        },
+        "message": "=🔔 *New Outreach Email — Approval Required*\n\n*Prospect:* {{ $('Normalize Prospect Data').item.json.first_name + ' ' + $('Normalize Prospect Data').item.json.last_name }}\n*Company:* {{ $('Normalize Prospect Data').item.json.company }}\n*Position:* {{ $('Normalize Prospect Data').item.json.job_title }}\n*Email:* {{ $('Normalize Prospect Data').item.json.email }}\n\n━━━━━━━━━━━━━━━━━━━━\n\n*Subject:* {{ $('Normalize Prospect Data').item.json.email_subject }}\n\n*Email body:*\n\n{{ $('Normalize Prospect Data').item.json.email_body }}\n\n━━━━━━━━━━━━━━━━━━━━\n\n📩 A draft has been created in Gmail.\n\nPlease review the email and select Approve & Send or Reject.",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "Approve & Send",
+            "disapproveLabel": "Reject"
+          }
+        },
+        "captureResponder": true,
+        "approvers": [
+          "YOUR_SLACK_USER_ID"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        1120,
+        -96
+      ],
+      "id": "579d598b-a29d-478e-aeaa-ab1ccc6f5028",
+      "name": "Slack — Human Approval"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "59acf562-a1d2-423d-86e4-2c38362b102e",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        1344,
+        -96
+      ],
+      "id": "39e19363-c326-4e30-ae25-eb61c4429f37",
+      "name": "Approval Decision"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gmail.googleapis.com/gmail/v1/users/me/drafts/send",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "gmailOAuth2",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "={{ $('Gmail — Create Outreach Draft').item.json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1568,
+        -192
+      ],
+      "id": "9d46fe4e-94e3-4d7d-8720-bc3f58d696d3",
+      "name": "Gmail — Send Approved Email"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "email": "={{ $('Normalize Prospect Data').item.json.email }}",
+        "additionalFields": {
+          "leadStatus": "ATTEMPTED_TO_CONTACT"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2.3,
+      "position": [
+        1568,
+        0
+      ],
+      "id": "4c686382-85b8-4512-97f8-fe07d6f16c65",
+      "name": "HubSpot — Outreach Sent"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Clay — Prospect Intake": {
+      "main": [
+        [
+          {
+            "node": "Normalize Prospect Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Prospect Data": {
+      "main": [
+        [
+          {
+            "node": "Validate Prospect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Prospect": {
+      "main": [
+        [
+          {
+            "node": "HubSpot — Upsert Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HubSpot — Upsert Contact": {
+      "main": [
+        [
+          {
+            "node": "Gmail — Create Outreach Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail — Create Outreach Draft": {
+      "main": [
+        [
+          {
+            "node": "Slack — Human Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack — Human Approval": {
+      "main": [
+        [
+          {
+            "node": "Approval Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approval Decision": {
+      "main": [
+        [
+          {
+            "node": "Gmail — Send Approved Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HubSpot — Outreach Rejected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail — Send Approved Email": {
+      "main": [
+        [
+          {
+            "node": "HubSpot — Outreach Sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "nodeGroups": [],
+  "tags": []
+}
