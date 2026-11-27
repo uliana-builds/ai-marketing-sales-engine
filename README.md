@@ -37,39 +37,7 @@ The engine is designed to reduce manual prospect research, automate CRM manageme
 
 ## System Architecture
 
-```
-Clay - Prospect Discovery & Enrichment
-                 |
-                 v
-n8n - Prospect Intake
-                 |
-                 v
-Normalize Prospect Data
-                 |
-                 v
-Validate Prospect
-                 |
-                 v
-HubSpot - Upsert Contact
-                 |
-                 v
-Gmail - Create Outreach Draft
-                 |
-                 v
-Slack - Human Approval
-                 |
-                 v
-         Approval Decision
-          /            \
-     Approved        Rejected
-        |                |
-        v                v
-  Gmail - Send      No Email Sent
-        |                |
-        v                v
-  HubSpot -         HubSpot -
-  Outreach Sent     Outreach Rejected
-```
+![AI Marketing and Sales Engine Workflow](workflow%20animation.gif)
 
 ## Workflow Implementation
 
