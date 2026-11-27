@@ -37,7 +37,19 @@ The engine is designed to reduce manual prospect research, automate CRM manageme
 
 ## System Architecture
 
-![AI Marketing and Sales Engine Workflow](workflow%20animation.gif)
+```mermaid
+flowchart TD
+    A[Clay - Prospect Intake] --> B[Normalize Prospect Data]
+    B --> C{Validate Prospect}
+    C -->|Valid| D[HubSpot - Upsert Contact]
+    C -->|Invalid| X[Stop Processing]
+    D --> E[Gmail - Create Outreach Draft]
+    E --> F[Slack - Human Approval]
+    F --> G{Approval Decision}
+    G -->|Approved| H[Gmail - Send Approved Email]
+    H --> I[HubSpot - Outreach Sent]
+    G -->|Rejected| J[HubSpot - Outreach Rejected]
+```
 
 ## Workflow Implementation
 
